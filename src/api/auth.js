@@ -1,3 +1,4 @@
+// api/authApi.js
 import axios from "axios";
 
 const authApi = axios.create({
@@ -5,7 +6,7 @@ const authApi = axios.create({
 });
 
 authApi.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token"); // updated from localStorage
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputField from "../../components/InputField";
-import logo from '../../assets/footer-logo.png';
+import logo from "../../assets/footer-logo.png";
 import { useAuth } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -13,7 +14,8 @@ const Login = () => {
 
   // ✅ Redirect if token already exists
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
+
     if (token) {
       navigate("/home");
     }
@@ -21,7 +23,7 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -33,17 +35,29 @@ const Login = () => {
           formData
         );
         login(response.data.token);
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
         navigate("/home");
       } catch (error) {
+        let message =
+          error.response && error.response.data && error.response.data.message;
 
-        console.log(error)
-     
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: message,
+        });
       }
     }
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(prev => !prev);
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -58,7 +72,9 @@ const Login = () => {
       <div>
         <div className="flex items-center justify-center py-32">
           <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+              Login
+            </h2>
             <form onSubmit={handleSubmit}>
               <InputField
                 label="Email"
