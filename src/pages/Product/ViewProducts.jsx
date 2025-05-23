@@ -67,8 +67,9 @@ const ViewProduct = () => {
             <tr>
               <th className="py-2 px-4 border-b">S.No</th>
               <th className="py-2 px-4 border-b ">Image</th>
-              <th className="py-2 px-4 border-b">Main Heading</th>
               <th className="py-2 px-4 border-b">Name</th>
+              <th className="py-2 px-4 border-b">Heading</th>
+
               <th className="py-2 px-4 border-b">Price</th>
               <th className="py-2 px-4 border-b">Discount</th>
               <th className="py-2 px-4 border-b">Quantity</th>
@@ -89,12 +90,13 @@ const ViewProduct = () => {
                     className="w-36 h-16 object-cover rounded"
                   />
                 </td>
-                <td className="py-2 px-4 border-b text-center ">
-                  <p>{product.mainHeading}</p>
-                </td>
                 <td className="py-2 px-4 border-b text-center">
                   {product.name}
                 </td>
+                <td className="py-2 px-4 border-b text-center ">
+                  <p>{product.mainHeading}</p>
+                </td>
+
                 <td className="py-2 px-4 border-b text-center">
                   ₹{product.price}
                 </td>

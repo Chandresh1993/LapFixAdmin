@@ -106,7 +106,7 @@ const AddProduct = () => {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block mb-1 font-medium">Main Heading</label>
+          <label className="block mb-1 font-medium">Heading</label>
           <input
             type="text"
             name="mainHeading"

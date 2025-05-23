@@ -118,7 +118,7 @@ const EditProduct = () => {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {[
-          { label: "Main Heading", name: "mainHeading" },
+          { label: " Heading", name: "mainHeading" },
           { label: "Product Name", name: "name" },
           { label: "Price", name: "price", numeric: true },
           { label: "Discount Price", name: "discountPrice", numeric: true },
