@@ -36,17 +36,20 @@ const Header = () => {
     <header className="bg-blue-800 text-white p-4">
       <div className="flex flex-row items-center justify-between ">
         <div className="w-28">
-          <img className="w-full h-full object-cover" src={logo} alt="logo" />
+          <p className="text-white uppercase  font-bold text-2xl">GolfCource</p>
         </div>
         <div className="flex flex-row items-center gap-8 text-lg font-bold  ">
-          <button onClick={HomePage} className="uppercase hover:underline">
+          <button
+            onClick={HomePage}
+            className="uppercase py-2 px-3 bg-white text-black hover:bg-gray-200 hover:scale-105 transition-all duration-300 ease-in-out rounded-md"
+          >
             Home
           </button>
         </div>
         <div>
           <button
             onClick={handleLogout}
-            className="text-xl font-bold hover:underline uppercase"
+            className="uppercase py-2 text-black px-3 font-bold bg-white hover:bg-gray-200 hover:scale-105 transition-all duration-300 ease-in-out rounded-md"
           >
             Logout
           </button>
