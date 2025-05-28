@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader";
 
 const EditProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = location.state;
   const [subCategories, setSubCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     mainHeading: "",
@@ -18,6 +22,7 @@ const EditProduct = () => {
     description: "",
     howToInstallAndTips: "",
     subCategoryID: "",
+    year: "",
   });
 
   const [images, setImages] = useState([]);
@@ -26,11 +31,13 @@ const EditProduct = () => {
   // 🔹 Fetch product by ID on mount
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(
           `${process.env.REACT_APP_BASE_URL}/product/${id}`
         );
         const product = res.data;
+        console.log(product, " productssss");
 
         setFormData({
           mainHeading: product.mainHeading,
@@ -41,11 +48,14 @@ const EditProduct = () => {
           description: product.description,
           howToInstallAndTips: product.howToInstallAndTips,
           subCategoryID: product.subCategoryID?._id || "",
+          year: product.year,
         });
 
         setImagePreviews(product.images || []);
       } catch (err) {
         Swal.fire("Error", "Failed to fetch product", "error");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -54,6 +64,7 @@ const EditProduct = () => {
 
   useEffect(() => {
     const fetchSubCategories = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(
           `${process.env.REACT_APP_BASE_URL}/subCategory`
@@ -62,6 +73,8 @@ const EditProduct = () => {
         setSubCategories(res.data);
       } catch (err) {
         console.error("Failed to fetch subcategories", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -81,6 +94,7 @@ const EditProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitLoading(true);
 
     const data = new FormData();
     for (let key in formData) {
@@ -101,6 +115,8 @@ const EditProduct = () => {
         err?.response?.data?.message || "Update failed",
         "error"
       );
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -109,6 +125,10 @@ const EditProduct = () => {
     const isNumber = /^[0-9]$/.test(e.key);
     if (!isNumber && !allowed.includes(e.key)) e.preventDefault();
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="w-full mx-auto p-8 bg-white shadow-lg mt-10 rounded">
@@ -132,11 +152,34 @@ const EditProduct = () => {
               value={formData[name]}
               onChange={handleChange}
               onKeyDown={numeric ? handleNumericKeyDown : undefined}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 text-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
         ))}
+
+        <div>
+          <label className="block mb-1 font-medium">Product Year</label>
+          <select
+            name="year"
+            value={formData.year}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border optional:text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+            required
+          >
+            <option disabled value="">
+              -- Select Year --
+            </option>
+            {Array.from({ length: 50 }, (_, i) => {
+              const year = new Date().getFullYear() - i;
+              return (
+                <option key={year} value={String(year)}>
+                  {year}
+                </option>
+              );
+            })}
+          </select>
+        </div>
 
         <div>
           <label className="block mb-1 font-medium">Description</label>
@@ -145,7 +188,7 @@ const EditProduct = () => {
             rows="3"
             value={formData.description}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 text-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
         <div>
@@ -154,7 +197,7 @@ const EditProduct = () => {
             name="subCategoryID"
             value={formData.subCategoryID}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+            className="w-full px-4 py-2 optional:text-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
             required
           >
             <option className="text-base " value="">
@@ -177,7 +220,7 @@ const EditProduct = () => {
             rows="3"
             value={formData.howToInstallAndTips}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
 
@@ -211,9 +254,14 @@ const EditProduct = () => {
 
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded"
+          className={`w-full py-2 rounded font-semibold text-white ${
+            submitLoading
+              ? "bg-green-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
+          disabled={submitLoading}
         >
-          Update Product
+          {submitLoading ? <Loader /> : "Update Product"}
         </button>
       </form>
     </div>

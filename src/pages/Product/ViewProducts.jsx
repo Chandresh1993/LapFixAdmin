@@ -2,11 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Loader from "../../components/Loader";
 
 const ViewProduct = () => {
   const location = useLocation();
   const { id } = location.state || {};
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // for loader
 
   const navigation = useNavigate();
 
@@ -17,6 +19,7 @@ const ViewProduct = () => {
 
   const fetchProductData = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/product/products/${id}`
       );
@@ -28,6 +31,8 @@ const ViewProduct = () => {
         title: "Fetch Failed",
         text: message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,6 +62,9 @@ const ViewProduct = () => {
     }
   };
 
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">View Products</h1>
@@ -69,6 +77,7 @@ const ViewProduct = () => {
               <th className="py-2 px-4 border-b ">Image</th>
               <th className="py-2 px-4 border-b">Name</th>
               <th className="py-2 px-4 border-b">Heading</th>
+              <th className="py-2 px-4 border-b">Year</th>
 
               <th className="py-2 px-4 border-b">Price</th>
               <th className="py-2 px-4 border-b">Discount</th>
@@ -95,6 +104,9 @@ const ViewProduct = () => {
                 </td>
                 <td className="py-2 px-4 border-b text-center ">
                   <p>{product.mainHeading}</p>
+                </td>
+                <td className="py-2 px-4 border-b text-center ">
+                  <p>{product.year}</p>
                 </td>
 
                 <td className="py-2 px-4 border-b text-center">
