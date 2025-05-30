@@ -10,7 +10,7 @@ const EditProduct = () => {
   const { id } = location.state;
   const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [subLoading, setSubLoading] = useState(false);
+
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -37,7 +37,6 @@ const EditProduct = () => {
           `${process.env.REACT_APP_BASE_URL}/product/${id}`
         );
         const product = res.data;
-        console.log(product, " productssss");
 
         setFormData({
           mainHeading: product.mainHeading,
@@ -51,7 +50,7 @@ const EditProduct = () => {
           year: product.year,
         });
 
-        setImagePreviews(product.images || []);
+        setImagePreviews((product.images || []).map((img) => img.url));
       } catch (err) {
         Swal.fire("Error", "Failed to fetch product", "error");
       } finally {

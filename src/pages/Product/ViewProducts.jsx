@@ -94,7 +94,7 @@ const ViewProduct = () => {
                 <td className="py-2 px-4 border-b text-center">{index + 1}</td>
                 <td className="py-2 px-4 border-b  flex items-center justify-center text-center">
                   <img
-                    src={product.images[0]}
+                    src={product.images[0].url}
                     alt=""
                     className="w-36 h-16 object-cover rounded"
                   />
