@@ -36,7 +36,7 @@ const Header = () => {
     <header className="bg-blue-800 text-white p-4">
       <div className="flex flex-row items-center justify-between ">
         <div className="w-28">
-          <p className="text-white uppercase  font-bold text-2xl">GolfCource</p>
+          <p className="text-white uppercase  font-bold text-2xl">Lapfix</p>
         </div>
         <div className="flex flex-row items-center gap-8 text-lg font-bold  ">
           <button
