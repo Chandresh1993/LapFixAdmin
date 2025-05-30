@@ -93,11 +93,17 @@ const ViewProduct = () => {
               >
                 <td className="py-2 px-4 border-b text-center">{index + 1}</td>
                 <td className="py-2 px-4 border-b  flex items-center justify-center text-center">
-                  <img
-                    src={product.images[0].url}
-                    alt=""
-                    className="w-36 h-16 object-cover rounded"
-                  />
+                  {product.images && product.images.length > 0 ? (
+                    <img
+                      src={product.images[0].url}
+                      alt=""
+                      className="w-36 h-16 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-36 h-16 flex items-center justify-center text-gray-400 border border-dashed border-gray-300 rounded">
+                      No Image
+                    </div>
+                  )}
                 </td>
                 <td className="py-2 px-4 border-b text-center">
                   {product.name}
