@@ -95,6 +95,27 @@ const EditProduct = () => {
     e.preventDefault();
     setSubmitLoading(true);
 
+    const requiredFields = [
+      "mainHeading",
+      "name",
+      "price",
+      "quantity",
+      "description",
+      "howToInstallAndTips",
+      "year",
+    ];
+
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        Swal.fire({
+          icon: "warning",
+          title: "Missing Field",
+          text: `Please fill the "${field}" field.`,
+        });
+        return;
+      }
+    }
+
     const data = new FormData();
     for (let key in formData) {
       data.append(key, formData[key]);
