@@ -3,10 +3,19 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
 import Loader from "../../components/Loader";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
-  const loccation = useLocation();
-  const { id } = loccation.state;
+  const location = useLocation();
+  const id = location?.state?.id || "";
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!id) {
+      Swal.fire("Invalid Access", "SubCategory name not found.", "error");
+      navigate("/");
+    }
+  }, [id, navigate]);
 
   const [formData, setFormData] = useState({
     mainHeading: "",
@@ -47,6 +56,27 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const requiredFields = [
+      "mainHeading",
+      "name",
+      "price",
+      "quantity",
+      "description",
+      "howToInstallAndTips",
+      "year",
+    ];
+
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        Swal.fire({
+          icon: "warning",
+          title: "Missing Field",
+          text: `Please fill the "${field}" field.`,
+        });
+        return;
+      }
+    }
 
     const data = new FormData();
     for (let key in formData) {

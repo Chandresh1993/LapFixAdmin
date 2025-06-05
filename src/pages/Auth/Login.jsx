@@ -70,7 +70,7 @@ const Login = () => {
       <div className="bg-blue-800 h-32">
         <div className="flex flex-row items-center h-full justify-center">
           <div className="">
-            <p className="text-4xl text-white font-bold uppercase">Lapfix</p>
+            <p className="text-4xl text-white font-bold uppercase">GolfCorce</p>
           </div>
         </div>
       </div>

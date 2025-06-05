@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import logo from "../assets/footer-logo.png";
+
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 const Header = () => {
@@ -36,7 +36,7 @@ const Header = () => {
     <header className="bg-blue-800 text-white p-4">
       <div className="flex flex-row items-center justify-between ">
         <div className="w-28">
-          <p className="text-white uppercase  font-bold text-2xl">Lapfix</p>
+          <p className="text-white uppercase  font-bold text-2xl">GolfCourse</p>
         </div>
         <div className="flex flex-row items-center gap-8 text-lg font-bold  ">
           <button
