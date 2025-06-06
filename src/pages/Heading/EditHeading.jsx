@@ -15,7 +15,7 @@ const EditHeading = () => {
     const getByIdHeading = async (id) => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/mainCategory/${id}`
+          `${process.env.REACT_APP_BASE_URL}/firstCatgeory/${id}`
         );
         setHeadingData(response.data);
       } catch (error) {
@@ -41,7 +41,7 @@ const EditHeading = () => {
 
     try {
       const data = await axios.patch(
-        `${process.env.REACT_APP_BASE_URL}/mainCategory/${id}`,
+        `${process.env.REACT_APP_BASE_URL}/firstCatgeory/${id}`,
         headingData
       );
 

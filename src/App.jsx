@@ -7,15 +7,21 @@ import MainLayout from "./layouts/MainLayout";
 import Loader from "./components/Loader";
 
 const Signup = lazy(() => import("./pages/Auth/Login"));
-const Home = lazy(() => import("./pages/MainHeading/Home"));
-const SingleHeading = lazy(() => import("./pages/MainHeading/AddHeading"));
-const EditHeading = lazy(() => import("./pages/MainHeading/EditHeading"));
+const Home = lazy(() => import("./pages/Heading/Home"));
+const SingleHeading = lazy(() => import("./pages/Heading/AddHeading"));
+const EditHeading = lazy(() => import("./pages/Heading/EditHeading"));
 const SubHeading = lazy(() => import("./pages/SubHeading/SubHeading"));
 const AddSubHeading = lazy(() => import("./pages/SubHeading/AddMainHeading"));
 const EditSubHeading = lazy(() => import("./pages/SubHeading/EditMainHeading"));
 const AddProducts = lazy(() => import("./pages/Product/AddProduct"));
 const Products = lazy(() => import("./pages/Product/ViewProducts"));
 const EditProduct = lazy(() => import("./pages/Product/EditProduct"));
+const AddSecoundHeading = lazy(() =>
+  import("./pages/SecoundHeading/AddSecoundHeading")
+);
+const EditSecoundHeading = lazy(() =>
+  import("./pages/SecoundHeading/EditSecoundHeading")
+);
 
 function App() {
   return (
@@ -54,6 +60,28 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/addSecoundHeading"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <AddSecoundHeading />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/editSecoundHeading"
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <EditSecoundHeading />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/subheading"
               element={
@@ -65,7 +93,7 @@ function App() {
               }
             />
             <Route
-              path="/addsubHeading"
+              path="/addsubHeading/:id"
               element={
                 <ProtectedRoute>
                   <MainLayout>

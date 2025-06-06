@@ -25,7 +25,7 @@ const Sidebar = () => {
   const fetehData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/mainCategory`
+        `${process.env.REACT_APP_BASE_URL}/firstCatgeory`
       );
       setHeading(response.data);
     } catch (error) {
@@ -34,7 +34,7 @@ const Sidebar = () => {
   };
 
   const handleOnclick = (id) => {
-    navigation("/addsubHeading", { state: { id: id } });
+    navigation("/addSecoundHeading", { state: { id: id } });
   };
 
   return (
@@ -45,7 +45,7 @@ const Sidebar = () => {
           <li key={item._id}>
             <p
               onClick={() => handleOnclick(item._id)}
-              className="block px-4 py-2 text-lg font-black rounded-md transition duration-200 text-white hover:bg-blue-700 hover:text-white uppercase  cursor-pointer"
+              className="block px-4 py-2 text-lg font-black rounded-md transition duration-200 text-white hover:bg-blue-700 hover:text-white uppercase cursor-pointer break-words whitespace-normal"
             >
               {item.name}
             </p>

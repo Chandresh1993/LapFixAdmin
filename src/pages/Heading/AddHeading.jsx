@@ -19,7 +19,7 @@ const SingleHeading = () => {
     if (Addheading.name) {
       try {
         await axios.post(
-          `${process.env.REACT_APP_BASE_URL}/mainCategory`,
+          `${process.env.REACT_APP_BASE_URL}/firstCatgeory`,
           Addheading
         );
         Swal.fire({

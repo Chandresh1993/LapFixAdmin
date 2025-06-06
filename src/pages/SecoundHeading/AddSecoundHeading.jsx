@@ -1,37 +1,37 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const AddMainHeading = () => {
+const AddSecoundHeading = () => {
   const [headingData, setHeadingData] = useState({
     name: "",
-    subCategories: [],
+    mainCategories: [],
   });
   const [data, setData] = useState({ name: "" });
   const navigation = useNavigate();
+  const location = useLocation();
+  const { id } = location.state || {};
 
-  const { id } = useParams();
   const getByIdHeading = async (id) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/mainCategory/${id}`
+        `${process.env.REACT_APP_BASE_URL}/firstCatgeory/${id}`
       );
       setHeadingData(response.data);
     } catch (error) {
-      let message = error.response?.data?.message || "Something went wrong";
+      let message =
+        error.response && error.response.data && error.response.data.message;
       Swal.fire({
         icon: "error",
-        title: "Fetch Error",
+        title: "Single get heading error",
         text: message,
       });
     }
   };
 
   useEffect(() => {
-    if (id) {
-      getByIdHeading(id);
-    }
+    if (id) getByIdHeading(id); // only call if id exists
   }, [id]);
 
   const handleChange = (e) => {
@@ -44,28 +44,30 @@ const AddMainHeading = () => {
     if (data.name) {
       let createData = {
         name: data.name,
-        mainCategoryId: id,
+        firstCategoryId: id,
       };
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BASE_URL}/subCategory`,
+          `${process.env.REACT_APP_BASE_URL}/mainCategory`,
           createData
         );
 
         const newSubCategory = response.data;
-        // ✅ Update headingData.subCategories in local state
+
         setHeadingData((prev) => ({
           ...prev,
-          subCategories: [...prev.subCategories, newSubCategory],
+          mainCategories: [...prev.mainCategories, newSubCategory],
         }));
 
+        // Re-fetch full list
         await getByIdHeading(id);
         // ✅ Optionally clear the input field
         setData({ name: "" });
+
         Swal.fire({
           icon: "success",
-          title: "Add Heading",
+          title: "Add Sub -Heading",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -83,13 +85,13 @@ const AddMainHeading = () => {
   };
 
   const handleOnEdit = (id) => {
-    navigation(`/EditsubHeading`, { state: { id } });
+    navigation(`/editSecoundHeading`, { state: { id } });
   };
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "Deleting this category will also delete all linked products.",
+      text: "Deleting this category ",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -100,7 +102,7 @@ const AddMainHeading = () => {
     if (result.isConfirmed) {
       try {
         await axios.delete(
-          `${process.env.REACT_APP_BASE_URL}/subCategory/${id}`
+          `${process.env.REACT_APP_BASE_URL}/mainCategory/${id}`
         );
 
         // Show success alert
@@ -115,7 +117,9 @@ const AddMainHeading = () => {
         // Remove deleted item from state
         setHeadingData((prev) => ({
           ...prev,
-          subCategories: prev.subCategories.filter((value) => value._id !== id),
+          mainCategories: prev.mainCategories.filter(
+            (value) => value._id !== id
+          ),
         }));
       } catch (error) {
         let message = error.response?.data?.message || "Something went wrong";
@@ -128,19 +132,15 @@ const AddMainHeading = () => {
     }
   };
 
-  const addProduct = (id) => {
-    navigation("/addProduct", { state: { id: id } });
-  };
-
-  const idSendHandler = (id) => {
-    navigation("/product", { state: { id: id } });
+  const handleNavigation = (id) => {
+    navigation(`/addsubHeading/${id}`);
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="mb-6">
         <p className="text-3xl text-center font-bold text-blue-700 uppercase">
-          Add Child Category
+          Add Sub Heading
         </p>
       </div>
 
@@ -151,7 +151,7 @@ const AddMainHeading = () => {
       </div>
       <form className="mt-3">
         <label className="text-lg font-medium text-gray-700 uppercase ">
-          Child Category Name
+          Sub Heading Name
         </label>
 
         <div className="mt-2">
@@ -176,16 +176,16 @@ const AddMainHeading = () => {
       </form>
 
       <div>
-        {headingData.subCategories.length > 0 && (
+        {headingData.mainCategories.length > 0 && (
           <div className="mt-4 space-y-2">
             <p className="text-lg font-medium text-gray-700 mb-2 uppercase">
-              Child Categories
+              Sub Categories
             </p>
 
             {/* Table-style headers */}
             <div className="flex font-semibold text-gray-800 border-b pb-2"></div>
 
-            {headingData.subCategories.map((sub, index) => (
+            {headingData.mainCategories.map((sub, index) => (
               <div
                 key={sub._id}
                 className="flex items-center justify-between px-2 py-2 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 rounded-md shadow-sm transition"
@@ -194,18 +194,12 @@ const AddMainHeading = () => {
                 <div className="w-6/12">{sub.name}</div>
                 <div className="w-5/12 flex justify-end space-x-4">
                   <button
-                    onClick={() => idSendHandler(sub._id)}
-                    className="text-yellow-600 hover:underline font-medium"
-                  >
-                    View Pro
-                  </button>
-
-                  <button
-                    onClick={() => addProduct(sub._id)}
+                    onClick={() => handleNavigation(sub._id)}
                     className="text-green-600 hover:underline font-medium"
                   >
-                    Add Pro
+                    Add Child Category
                   </button>
+
                   <button
                     onClick={() => handleOnEdit(sub._id)}
                     className="text-blue-600 hover:underline font-medium"
@@ -228,4 +222,4 @@ const AddMainHeading = () => {
   );
 };
 
-export default AddMainHeading;
+export default AddSecoundHeading;

@@ -15,7 +15,7 @@ const Home = () => {
   const fetchHeading = async () => {
     try {
       const fetchData = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/mainCategory`
+        `${process.env.REACT_APP_BASE_URL}/firstCatgeory`
       );
 
       setHeading(fetchData.data);
@@ -53,7 +53,7 @@ const Home = () => {
     if (result.isConfirmed) {
       try {
         await axios.delete(
-          `${process.env.REACT_APP_BASE_URL}/mainCategory/${id}`
+          `${process.env.REACT_APP_BASE_URL}/firstCatgeory/${id}`
         );
 
         Swal.fire({
